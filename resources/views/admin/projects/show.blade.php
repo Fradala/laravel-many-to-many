@@ -29,6 +29,18 @@
         <p>
             {{ $project->id }} -- Type: {{ $project->type->name }}
         </p>
+        <ul>
+            @forelse ($project->technologies as $technologie )
+            <li class="d-inline m-3" >
+                {{ $technologie->name }}
+            </li>
+            @empty
+                <p>
+                    non hanno tecnologie!
+                </p>
+            @endforelse
+            
+        </ul>
         <p>
             {{ $project->linguaggio_usato }}
         </p>

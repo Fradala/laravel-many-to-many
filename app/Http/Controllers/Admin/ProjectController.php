@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Technologie;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ class ProjectController extends Controller
         'image'=>['required', 'url:https'],
         'date'=>['required', 'date'],
         'linguaggio_usato'=>['required', 'min:3', 'max:255'],
+        'technologies'=>['exists:technologies,id'],
     ];
 
     
@@ -38,8 +40,9 @@ class ProjectController extends Controller
     {
         $project = new Project();
         $types = Type::all();
+        $technologies = Technologie::all();
         
-        return view('admin.projects.create', compact('project', 'types'));
+        return view('admin.projects.create', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -50,6 +53,7 @@ class ProjectController extends Controller
         $data = $request->validate($this->rules);
         $rules['type_id'] =Auth::id();
         $project = Project::create($data);
+        $project->techonologies()->sync($data['technologies']);
 
         return redirect()->route('admin.projects.show', $project);
     }
@@ -68,7 +72,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technologie::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**

@@ -53,7 +53,7 @@ class ProjectController extends Controller
         $data = $request->validate($this->rules);
         $rules['type_id'] =Auth::id();
         $project = Project::create($data);
-        $project->techonologies()->sync($data['technologies']);
+        $project->technologies()->sync($data['technologies']);
 
         return redirect()->route('admin.projects.show', $project);
     }
@@ -83,7 +83,7 @@ class ProjectController extends Controller
     {
         $data = $request->validate($this->rules);
         $project->update($data);
-
+        $project->technologies()->sync($data['technologies']);
         return redirect()->route('admin.projects.show', $project);
     }
 
